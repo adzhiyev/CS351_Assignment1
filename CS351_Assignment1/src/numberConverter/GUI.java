@@ -44,7 +44,7 @@ public class GUI {
 	Application app = new Application();
 	Converter converter = new Converter();
 	// JFrames
-	private JFrame frm = new JFrame("Number Converter");
+	private JFrame frm = new JFrame("Number Converter"); //main frame
 	private JFrame frmColor = new JFrame("Choose Background Color"); // frame for the JColorChooser
 
 	// JLabel's
@@ -75,7 +75,7 @@ public class GUI {
 	private JPanel pnlColorChooser = new JPanel();
 	private JPanel pnlClrButtons = new JPanel();
 	private JColorChooser colorChooser = new JColorChooser();
-	// JButtons for Color Chooser pnl
+	// JButtons for Color Chooser panel
 	private JButton colorOkBtn = new JButton("OK");
 	private JButton colorCancelBtn = new JButton("Cancel");
 	private JButton colorResetBtn = new JButton("Reset");
@@ -99,7 +99,7 @@ public class GUI {
 		colorCancelBtn.setSize(20, 20);
 		colorResetBtn.setSize(20, 20);
 
-		// ands labels and textfields to frame
+		// adds labels and textfields to frame
 		pnlLeft.add(decimalLbl);
 		pnlCenter.add(decimalTxt);
 		pnlLeft.add(binaryLbl);
@@ -363,44 +363,33 @@ public class GUI {
 		 * Action Listener for when convertBtn is Pressed
 		 */
 		convertBtn.addActionListener(new ActionListener() {
-			@Override
-
 			/*
 			 * Converts and displays values for the number
 			 */
+			@Override
 			public void actionPerformed(ActionEvent e) {
 
 				// Checks to see which textfield is not empty and then converts that value
 				// to each other conversion, and displays them in their corresponding JTextField
 				if (!decimalTxt.getText().isEmpty()) {
 
-					try {
+				
 						String decimalValue = decimalTxt.getText();
-						String binaryValue = converter.convertFromDecimal(decimalValue, 2);
+						String binaryValue = Converter.convertFromDecimal(decimalValue, 2);
 						binaryTxt.setText(binaryValue);
 
-						String octalValue = converter.convertFromDecimal(decimalValue, 8);
+						String octalValue = Converter.convertFromDecimal(decimalValue, 8);
 						octalTxt.setText(octalValue);
 
-						String hexValue = converter.convertFromDecimal(decimalValue, 16);
+						String hexValue = Converter.convertFromDecimal(decimalValue, 16);
 						hexTxt.setText(hexValue);
-						String charValue = converter.binaryToASCII(binaryValue);
+						String charValue = Converter.binaryToASCII(binaryValue);
 						charTxt.setText(charValue);
-						String floatValue = converter.binaryToFloatingPoint(binaryValue);
+						String floatValue = Converter.binaryToFloatingPoint(binaryValue);
 						floatTxt.setText(floatValue);
 
-						System.out.println("hex val" + hexValue);
-						colorTxt.setBackground(Color.decode("#" + hexValue));
-					}
-
-					catch (Exception error) {
-						System.out.println("error");
-						binaryTxt.setText("error");
-						octalTxt.setText("error");
-						hexTxt.setText("error");
-						charTxt.setText("error");
-						floatTxt.setText("error");
-					}
+						colorTxt.setBackground(Color.decode("#" + Converter.getFloorVal(hexValue)));					
+					
 				}
 
 				else if (!binaryTxt.getText().isEmpty()) {
@@ -420,7 +409,7 @@ public class GUI {
 
 					String charValue = Converter.binaryToASCII(binaryValue);
 					charTxt.setText(charValue);
-					colorTxt.setBackground(Color.decode("#" + hexValue));
+					colorTxt.setBackground(Color.decode("#" + Converter.getFloorVal(hexValue)));
 				}
 
 				else if (!octalTxt.getText().isEmpty()) {
@@ -431,30 +420,34 @@ public class GUI {
 					decimalTxt.setText(decimalValue);
 					String binaryValue = Converter.convertFromDecimal(decimalValue, 2);
 					binaryTxt.setText(binaryValue);
-					String hexValue = Converter.convertFromDecimal(decimalValue, 8);
+					String hexValue = Converter.convertFromDecimal(decimalValue, 16);
 					hexTxt.setText(hexValue);
 					String charValue = Converter.binaryToASCII(binaryValue);
+					charTxt.setText(charValue);
 					String floatValue = Converter.binaryToFloatingPoint(binaryValue);
 					floatTxt.setText(floatValue);
-					colorTxt.setBackground(Color.decode("#" + hexValue));
+					colorTxt.setBackground(Color.decode("#" + Converter.getFloorVal(hexValue)));
 				}
 
 				else if (!hexTxt.getText().isEmpty()) {
 
-					String hexValue = hexTxt.getText();
-
+					String hexValue = hexTxt.getText().toUpperCase();
+					hexTxt.setText(hexValue);
 					String decimalValue = Converter.convertToDecimal(hexValue, 16);
 					decimalTxt.setText(decimalValue);
 
-					String binaryValue = app.decimalToBinary(decimalValue);
+					String binaryValue = Converter.convertFromDecimal(decimalValue, 2);
 					binaryTxt.setText(binaryValue);
 
-					String octValue = app.decimalToOctal(decimalValue);
+					String octValue = Converter.convertFromDecimal(decimalValue, 8);
 					octalTxt.setText(octValue);
-
-					String floatValue = app.decimalToFloat(decimalValue);
+					String charValue = Converter.binaryToASCII(binaryValue);
+					charTxt.setText(charValue);
+					String floatValue = Converter.binaryToFloatingPoint(binaryValue);
 					floatTxt.setText(floatValue);
-					colorTxt.setBackground(Color.decode("#" + hexValue));
+				
+					
+					colorTxt.setBackground(Color.decode("#" + Converter.getFloorVal(hexValue.substring(0,6))));
 				} 
 				
 				else if(!charTxt.getText().isEmpty()) {
@@ -474,15 +467,15 @@ public class GUI {
 					String floatValue = Converter.binaryToFloatingPoint(binaryValue);
 					floatTxt.setText(floatValue);
 					
-					colorTxt.setBackground(Color.decode("#" + hexValue));
+					colorTxt.setBackground(Color.decode("#" + Converter.getFloorVal(hexValue)));
 				}
 				else if (!floatTxt.getText().isEmpty()) {
 
 					String floatValue = floatTxt.getText();
-
 					
 					String binaryValue = Converter.floatingPointToBinary(floatValue);
 					binaryTxt.setText(binaryValue);
+			
 					String decimalValue = Converter.convertToDecimal(binaryValue, 2);
 					decimalTxt.setText(decimalValue);
 					String octValue = Converter.convertFromDecimal(decimalValue, 8);
@@ -490,8 +483,10 @@ public class GUI {
 					
 					String hexValue = Converter.convertFromDecimal(decimalValue, 16);
 					hexTxt.setText(hexValue);
-					colorTxt.setBackground(Color.decode("#" + hexValue));
-
+					String charValue = Converter.binaryToASCII(binaryValue);
+					charTxt.setText(charValue);
+					colorTxt.setBackground(Color.decode("#" + Converter.getFloorVal(hexValue)));
+					
 				}
 
 			}
@@ -538,16 +533,17 @@ public class GUI {
 				chosenColor = colorChooser.getColor();
 
 				String hexString = Converter.colorToHexString(chosenColor);
-
-				String hexVal = Converter.convertToDecimal(hexString, 16);
-
+				
+				System.out.println("hex string  " + hexString);
 				String decimalVal = Converter.convertToDecimal(hexString, 16);
+				System.out.println("dec val " + decimalVal);
 				String binaryVal = Converter.convertFromDecimal(decimalVal, 2);
-
+				
+				 System.out.println("hex val at gui " + hexString);
 				decimalTxt.setText(decimalVal);
 				binaryTxt.setText(binaryVal);
 				octalTxt.setText(Converter.convertFromDecimal(decimalVal, 8));
-				hexTxt.setText(hexVal);
+				hexTxt.setText(hexString);
 				charTxt.setText(Converter.binaryToASCII(binaryVal));
 				colorTxt.setBackground(chosenColor);
 				floatTxt.setText(Converter.binaryToFloatingPoint(binaryVal));
@@ -564,7 +560,7 @@ public class GUI {
 		colorCancelBtn.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-
+				//closes the frame
 				frmColor.dispose();
 
 			}
@@ -576,8 +572,7 @@ public class GUI {
 		colorResetBtn.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				// Need to add code to reset whatever the color chooser has "clicked"
-
+				
 				frmColor.dispose();
 			}
 		});

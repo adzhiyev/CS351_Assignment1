@@ -10,20 +10,6 @@ import java.util.Scanner;
  */
 public class Converter {
 
-	public static void main(String[] args) {
-
-		GUI converterGUI = new GUI();
-		Scanner input = new Scanner(System.in);
-
-		// System.out.print("Enter a value ");
-		String value = input.next();
-		// System.out.print("Enter the base ");
-		int base = input.nextInt();
-
-		String result = asciiToBinary(value);
-		// System.out.println("result " + result);
-	}
-
 	/*
 	 * Converts a number from a different base to decimal
 	 * 

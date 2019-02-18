@@ -81,8 +81,15 @@ public class GUI {
 	private JButton colorResetBtn = new JButton("Reset");
 	private Color chosenColor;
 
-	String errorMessage;
-	Boolean isValid;
+	// String to hold conversion values
+	String decimalValue;
+	String binaryValue;
+	String octalValue;
+	String hexValue;
+	String charValue;
+	String floatValue;
+	String errorMessage; // holds error message
+	Boolean isValid; // checks if string is valid
 
 	/*
 	 * Default constructor
@@ -102,7 +109,7 @@ public class GUI {
 		colorCancelBtn.setSize(20, 20);
 		colorResetBtn.setSize(20, 20);
 
-		// adds labels and textfields to frame
+		// adds labels and text fields to frame
 		pnlLeft.add(decimalLbl);
 		pnlCenter.add(decimalTxt);
 		pnlLeft.add(binaryLbl);
@@ -135,31 +142,34 @@ public class GUI {
 		pnlMain.add(pnlCenter, BorderLayout.CENTER);
 		pnlMain.add(pnlRight, BorderLayout.EAST);
 		pnlMain.add(pnlButtons, BorderLayout.SOUTH);
+		// adds the color buttons panel and the color chooser to the color panel
+		pnlColorChooser.add(colorChooser, BorderLayout.NORTH); // adds the color chooser to the panel
+		pnlColorChooser.add(pnlClrButtons, BorderLayout.SOUTH); // adds the pnlClrButtons to the panel
 
-		pnlColorChooser.add(colorChooser, BorderLayout.NORTH); // adds the color chooser to the pnl
-		pnlColorChooser.add(pnlClrButtons, BorderLayout.SOUTH); // adds the pnlClrButtons to the pnl
-
+		/*
+		 * Document listener for decimalTxt text field
+		 */
 		decimalTxt.getDocument().addDocumentListener(new DocumentListener() {
-
 			@Override
 			public void changedUpdate(DocumentEvent e) {
 				changed();
-
 			}
 
 			@Override
 			public void insertUpdate(DocumentEvent e) {
 				changed();
-
 			}
 
 			@Override
 			public void removeUpdate(DocumentEvent e) {
 				changed();
-
 			}
 
+			/*
+			 * Checks if there has been any changes in the text field
+			 */
 			public void changed() {
+				// checks if the text field is empty which determines if it is editable or not
 				if (!decimalTxt.getText().isEmpty()) {
 
 					binaryTxt.setEditable(false);
@@ -176,27 +186,32 @@ public class GUI {
 				}
 			}
 		});
-		binaryTxt.getDocument().addDocumentListener(new DocumentListener() {
 
+		/*
+		 * Document listener for binaryTxt text field
+		 */
+		binaryTxt.getDocument().addDocumentListener(new DocumentListener() {
 			@Override
 			public void changedUpdate(DocumentEvent e) {
 				changed();
-
 			}
 
 			@Override
 			public void insertUpdate(DocumentEvent e) {
 				changed();
-
 			}
 
 			@Override
 			public void removeUpdate(DocumentEvent e) {
 				changed();
-
 			}
 
+			/*
+			 * Checks if there has been any changes in the text field
+			 */
 			public void changed() {
+
+				// checks if the text field is empty which determines if it is editable or not
 				if (!binaryTxt.getText().isEmpty()) {
 
 					decimalTxt.setEditable(false);
@@ -213,27 +228,31 @@ public class GUI {
 				}
 			}
 		});
-		octalTxt.getDocument().addDocumentListener(new DocumentListener() {
 
+		/*
+		 * Document listener for octalTxt text field
+		 */
+		octalTxt.getDocument().addDocumentListener(new DocumentListener() {
 			@Override
 			public void changedUpdate(DocumentEvent e) {
 				changed();
-
 			}
 
 			@Override
 			public void insertUpdate(DocumentEvent e) {
 				changed();
-
 			}
 
 			@Override
 			public void removeUpdate(DocumentEvent e) {
 				changed();
-
 			}
 
+			/*
+			 * Checks if there has been any changes in the text field
+			 */
 			public void changed() {
+				// checks if the text field is empty which determines if it is editable or not
 				if (!octalTxt.getText().isEmpty()) {
 
 					decimalTxt.setEditable(false);
@@ -250,27 +269,31 @@ public class GUI {
 				}
 			}
 		});
+		/*
+		 * Document listener for charTxt text field
+		 */
 		charTxt.getDocument().addDocumentListener(new DocumentListener() {
 
 			@Override
 			public void changedUpdate(DocumentEvent e) {
 				changed();
-
 			}
 
 			@Override
 			public void insertUpdate(DocumentEvent e) {
 				changed();
-
 			}
 
 			@Override
 			public void removeUpdate(DocumentEvent e) {
 				changed();
-
 			}
 
+			/*
+			 * Checks if there has been any changes in the text field
+			 */
 			public void changed() {
+				// checks if the text field is empty which determines if it is editable or not
 				if (!charTxt.getText().isEmpty()) {
 
 					decimalTxt.setEditable(false);
@@ -287,27 +310,31 @@ public class GUI {
 				}
 			}
 		});
-		hexTxt.getDocument().addDocumentListener(new DocumentListener() {
 
+		/*
+		 * Document listener for hexTxt text field
+		 */
+		hexTxt.getDocument().addDocumentListener(new DocumentListener() {
 			@Override
 			public void changedUpdate(DocumentEvent e) {
 				changed();
-
 			}
 
 			@Override
 			public void insertUpdate(DocumentEvent e) {
 				changed();
-
 			}
 
 			@Override
 			public void removeUpdate(DocumentEvent e) {
 				changed();
-
 			}
 
+			/*
+			 * Checks if there has been any changes in the text field
+			 */
 			public void changed() {
+				// checks if the text field is empty which determines if it is editable or not
 				if (!hexTxt.getText().isEmpty()) {
 
 					decimalTxt.setEditable(false);
@@ -315,6 +342,7 @@ public class GUI {
 					octalTxt.setEditable(false);
 					charTxt.setEditable(false);
 					floatTxt.setEditable(false);
+
 				} else {
 					decimalTxt.setEditable(true);
 					binaryTxt.setEditable(true);
@@ -324,27 +352,30 @@ public class GUI {
 				}
 			}
 		});
+		/*
+		 * Document listener for floatTxt text field
+		 */
 		floatTxt.getDocument().addDocumentListener(new DocumentListener() {
-
 			@Override
 			public void changedUpdate(DocumentEvent e) {
 				changed();
-
 			}
 
 			@Override
 			public void insertUpdate(DocumentEvent e) {
 				changed();
-
 			}
 
 			@Override
 			public void removeUpdate(DocumentEvent e) {
 				changed();
-
 			}
 
+			/*
+			 * Checks if there has been any changes in the text field
+			 */
 			public void changed() {
+				// checks if the text field is empty which determines if it is editable or not
 				if (!floatTxt.getText().isEmpty()) {
 
 					decimalTxt.setEditable(false);
@@ -362,6 +393,7 @@ public class GUI {
 				}
 			}
 		});
+
 		/*
 		 * Action Listener for when convertBtn is Pressed
 		 */
@@ -372,29 +404,37 @@ public class GUI {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 
-				// Checks to see which textfield is not empty and then converts that value
+				// Checks to see which text field is not empty and then converts that value
 				// to each other conversion, and displays them in their corresponding JTextField
 				if (!decimalTxt.getText().isEmpty()) {
 
-					String decimalValue = decimalTxt.getText();
-					isValid = InputValidation.decimalValidation(decimalValue);
-					System.out.println("isValid " + isValid);
+					decimalValue = decimalTxt.getText();
+					isValid = InputValidation.decimalValidation(decimalValue); // checks if input is valid
+
+					// if it is valid it can convert the values
 					if (isValid == true) {
-						String binaryValue = Converter.convertFromDecimal(decimalValue, 2);
+
+						binaryValue = Converter.convertFromDecimal(decimalValue, 2);
 						binaryTxt.setText(binaryValue);
 
-						String octalValue = Converter.convertFromDecimal(decimalValue, 8);
+						octalValue = Converter.convertFromDecimal(decimalValue, 8);
 						octalTxt.setText(octalValue);
 
-						String hexValue = Converter.convertFromDecimal(decimalValue, 16);
+						hexValue = Converter.convertFromDecimal(decimalValue, 16);
 						hexTxt.setText(hexValue);
-						String charValue = Converter.binaryToASCII(binaryValue);
+
+						charValue = Converter.binaryToASCII(binaryValue);
 						charTxt.setText(charValue);
-						String floatValue = Converter.binaryToFloatingPoint(binaryValue);
+
+						floatValue = Converter.binaryToFloatingPoint(binaryValue);
 						floatTxt.setText(floatValue);
 
+						// decodes the hex value to get the color and sets the color text field with
+						// value
 						colorTxt.setBackground(Color.decode("#" + Converter.getFloorVal(hexValue)));
-					} else {
+					}
+					// if not valid it will give a pop box error message
+					else {
 						errorMessage = "Not a valid entry only enter positive numbers between 0 and 2,147,483,647";
 						JOptionPane.showMessageDialog(null, errorMessage, "Error", JOptionPane.INFORMATION_MESSAGE);
 					}
@@ -403,26 +443,32 @@ public class GUI {
 
 				else if (!binaryTxt.getText().isEmpty()) {
 
-					String binaryValue = binaryTxt.getText();
+					binaryValue = binaryTxt.getText();
 					isValid = InputValidation.binaryValidation(binaryValue);
 
 					if (isValid == true) {
-						binaryValue = Converter.padNumber(binaryValue, 2);
+
+						binaryValue = Converter.padNumber(binaryValue, 2); // pads the binary values with 0
 						binaryTxt.setText(binaryValue);
-						String decimalValue = Converter.convertToDecimal(binaryValue, 2);
+
+						decimalValue = Converter.convertToDecimal(binaryValue, 2);
 						decimalTxt.setText(decimalValue);
-						String octalValue = Converter.convertFromDecimal(decimalValue, 8);
+
+						octalValue = Converter.convertFromDecimal(decimalValue, 8);
 						octalTxt.setText(octalValue);
-						String hexValue = Converter.convertFromDecimal(decimalValue, 16);
+
+						hexValue = Converter.convertFromDecimal(decimalValue, 16);
 						hexTxt.setText(hexValue);
 
-						String floatValue = Converter.binaryToFloatingPoint(binaryValue);
+						floatValue = Converter.binaryToFloatingPoint(binaryValue);
 						floatTxt.setText(floatValue);
 
-						String charValue = Converter.binaryToASCII(binaryValue);
+						charValue = Converter.binaryToASCII(binaryValue);
 						charTxt.setText(charValue);
+
 						colorTxt.setBackground(Color.decode("#" + Converter.getFloorVal(hexValue)));
 					} else {
+
 						errorMessage = "Not a valid entry only enter binary numbers(0,1) with a length of 32 or less";
 						JOptionPane.showMessageDialog(null, errorMessage, "Error", JOptionPane.INFORMATION_MESSAGE);
 					}
@@ -432,17 +478,24 @@ public class GUI {
 
 					String octValue = octalTxt.getText();
 					isValid = InputValidation.octalValidation(octValue);
+
 					if (isValid == true) {
-						String decimalValue = Converter.convertToDecimal(octValue, 8);
+
+						decimalValue = Converter.convertToDecimal(octValue, 8);
 						decimalTxt.setText(decimalValue);
-						String binaryValue = Converter.convertFromDecimal(decimalValue, 2);
+
+						binaryValue = Converter.convertFromDecimal(decimalValue, 2);
 						binaryTxt.setText(binaryValue);
-						String hexValue = Converter.convertFromDecimal(decimalValue, 16);
+
+						hexValue = Converter.convertFromDecimal(decimalValue, 16);
 						hexTxt.setText(hexValue);
-						String charValue = Converter.binaryToASCII(binaryValue);
+
+						charValue = Converter.binaryToASCII(binaryValue);
 						charTxt.setText(charValue);
-						String floatValue = Converter.binaryToFloatingPoint(binaryValue);
+
+						floatValue = Converter.binaryToFloatingPoint(binaryValue);
 						floatTxt.setText(floatValue);
+
 						colorTxt.setBackground(Color.decode("#" + Converter.getFloorVal(hexValue)));
 					}
 
@@ -454,25 +507,32 @@ public class GUI {
 
 				else if (!hexTxt.getText().isEmpty()) {
 
-					String hexValue = hexTxt.getText().toUpperCase();
+					hexValue = hexTxt.getText().toUpperCase();
 					isValid = InputValidation.hexValidation(hexValue);
+
 					if (isValid == true) {
-						hexValue = Converter.padNumber(hexValue, 16);
+						hexValue = Converter.padNumber(hexValue, 16); // pads the hex value with 0's
 						hexTxt.setText(hexValue);
-						String decimalValue = Converter.convertToDecimal(hexValue, 16);
+
+						decimalValue = Converter.convertToDecimal(hexValue, 16);
 						decimalTxt.setText(decimalValue);
 
-						String binaryValue = Converter.convertFromDecimal(decimalValue, 2);
+						binaryValue = Converter.convertFromDecimal(decimalValue, 2);
 						binaryTxt.setText(binaryValue);
 
-						String octValue = Converter.convertFromDecimal(decimalValue, 8);
-						octalTxt.setText(octValue);
-						String charValue = Converter.binaryToASCII(binaryValue);
+						octalValue = Converter.convertFromDecimal(decimalValue, 8);
+						octalTxt.setText(octalValue);
+
+						charValue = Converter.binaryToASCII(binaryValue);
 						charTxt.setText(charValue);
-						String floatValue = Converter.binaryToFloatingPoint(binaryValue);
+
+						floatValue = Converter.binaryToFloatingPoint(binaryValue);
 						floatTxt.setText(floatValue);
 
-						colorTxt.setBackground(Color.decode("#" + Converter.getFloorVal(hexValue.substring(0, 6))));
+						// sets the colorTxt background with the RGB values of the hex value, which is
+						// the last 6 digits
+						colorTxt.setBackground(Color.decode("#" + Converter.getFloorVal(hexValue.substring(2, 8))));
+
 					}
 
 					else {
@@ -482,22 +542,24 @@ public class GUI {
 				}
 
 				else if (!charTxt.getText().isEmpty()) {
-					String charValue = charTxt.getText();
+
+					charValue = charTxt.getText();
 					isValid = InputValidation.charValidation(charValue);
 
 					if (isValid == true) {
-						String binaryValue = Converter.asciiToBinary(charValue);
+
+						binaryValue = Converter.asciiToBinary(charValue);
 						binaryTxt.setText(binaryValue);
 
-						String decimalValue = Converter.convertToDecimal(binaryValue, 2);
+						decimalValue = Converter.convertToDecimal(binaryValue, 2);
 						decimalTxt.setText(decimalValue);
 
-						String octalValue = Converter.convertFromDecimal(decimalValue, 8);
+						octalValue = Converter.convertFromDecimal(decimalValue, 8);
 						octalTxt.setText(octalValue);
 
-						String hexValue = Converter.convertFromDecimal(decimalValue, 16);
+						hexValue = Converter.convertFromDecimal(decimalValue, 16);
 						hexTxt.setText(hexValue);
-						String floatValue = Converter.binaryToFloatingPoint(binaryValue);
+						floatValue = Converter.binaryToFloatingPoint(binaryValue);
 						floatTxt.setText(floatValue);
 
 						colorTxt.setBackground(Color.decode("#" + Converter.getFloorVal(hexValue)));
@@ -507,24 +569,30 @@ public class GUI {
 						errorMessage = "Not a valid entry only enter characters with a length of 4 or less";
 						JOptionPane.showMessageDialog(null, errorMessage, "Error", JOptionPane.INFORMATION_MESSAGE);
 					}
+
 				} else if (!floatTxt.getText().isEmpty()) {
 
 					String floatValue = floatTxt.getText();
 					isValid = InputValidation.floatValidation(floatValue);
 					if (isValid == true) {
-						String binaryValue = Converter.floatingPointToBinary(floatValue);
+
+						binaryValue = Converter.floatingPointToBinary(floatValue);
 						binaryTxt.setText(binaryValue);
 
-						String decimalValue = Converter.convertToDecimal(binaryValue, 2);
+						decimalValue = Converter.convertToDecimal(binaryValue, 2);
 						decimalTxt.setText(decimalValue);
-						String octValue = Converter.convertFromDecimal(decimalValue, 8);
-						octalTxt.setText(octValue);
 
-						String hexValue = Converter.convertFromDecimal(decimalValue, 16);
+						octalValue = Converter.convertFromDecimal(decimalValue, 8);
+						octalTxt.setText(octalValue);
+
+						hexValue = Converter.convertFromDecimal(decimalValue, 16);
 						hexTxt.setText(hexValue);
+
 						String charValue = Converter.binaryToASCII(binaryValue);
 						charTxt.setText(charValue);
+
 						colorTxt.setBackground(Color.decode("#" + Converter.getFloorVal(hexValue)));
+
 					} else {
 						errorMessage = "Not a valid entry only enter numbers between 1.7014x 10^38 and 1.7014x10^-38";
 						JOptionPane.showMessageDialog(null, errorMessage, "Error", JOptionPane.INFORMATION_MESSAGE);
@@ -535,9 +603,15 @@ public class GUI {
 			}
 		});
 
+		/*
+		 * Action Listener for when clearBtn is clicked
+		 */
 		clearBtn.addActionListener(new ActionListener() {
+
 			@Override
+
 			public void actionPerformed(ActionEvent e) {
+				// sets all the text fields to empty and the colorTxt field to white
 				decimalTxt.setText("");
 				binaryTxt.setText("");
 				octalTxt.setText("");
@@ -555,7 +629,6 @@ public class GUI {
 			@Override
 
 			public void actionPerformed(ActionEvent e) {
-
 				frmColor.setVisible(true); // makes the frmColor visible
 
 			}
@@ -565,32 +638,30 @@ public class GUI {
 		 */
 		colorOkBtn.addActionListener(new ActionListener() {
 			@Override
+			/*
+			 * Action performed when colorOkBtn is clicked
+			 */
 			public void actionPerformed(ActionEvent e) {
-				// This does not do the right thing, it just gets the color
-				// from the colorchooser and changes all the JTextFields to that
-				// color.
-
-				// I need to get the Hexadecimal value for the color and send
-				// that converted value to each text field.
 
 				chosenColor = colorChooser.getColor();
 
-				String hexString = Converter.colorToHexString(chosenColor);
+				// converts the hex color value to each number base
+				hexValue = Converter.colorToHexString(chosenColor);
+				decimalValue = Converter.convertToDecimal(hexValue, 16);
+				binaryValue = Converter.convertFromDecimal(decimalValue, 2);
+				octalValue = Converter.convertFromDecimal(decimalValue, 8);
+				charValue = Converter.binaryToASCII(binaryValue);
 
-				System.out.println("hex string  " + hexString);
-				String decimalVal = Converter.convertToDecimal(hexString, 16);
-				System.out.println("dec val " + decimalVal);
-				String binaryVal = Converter.convertFromDecimal(decimalVal, 2);
-
-				System.out.println("hex val at gui " + hexString);
-				decimalTxt.setText(decimalVal);
-				binaryTxt.setText(binaryVal);
-				octalTxt.setText(Converter.convertFromDecimal(decimalVal, 8));
-				hexTxt.setText(hexString);
-				charTxt.setText(Converter.binaryToASCII(binaryVal));
+				// sets the text fields with the corresponding values
+				decimalTxt.setText(decimalValue);
+				binaryTxt.setText(binaryValue);
+				octalTxt.setText(octalValue);
+				hexTxt.setText(hexValue);
+				charTxt.setText(charValue);
 				colorTxt.setBackground(chosenColor);
-				floatTxt.setText(Converter.binaryToFloatingPoint(binaryVal));
-				frmColor.setVisible(false);
+				floatTxt.setText(Converter.binaryToFloatingPoint(binaryValue));
+
+				frmColor.setVisible(false); // closes the color frame
 
 			}
 		});
@@ -617,13 +688,14 @@ public class GUI {
 			}
 		});
 
-		// default frame preferences for the main frame and color frame
+		// default frame preferences for the main frame
 		frm.add(pnlMain);
 		frm.setPreferredSize(new Dimension(600, 600));
 		frm.setVisible(true);
 		frm.pack();
 		frm.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frm.setLocation(100, 100);
+		// default frame preferences for the color frame
 		frmColor.add(pnlColorChooser);
 		frmColor.setPreferredSize(new Dimension(600, 600));
 		frmColor.pack();

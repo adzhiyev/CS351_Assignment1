@@ -44,7 +44,7 @@ public class GUI {
 	Application app = new Application();
 	Converter converter = new Converter();
 	// JFrames
-	private JFrame frm = new JFrame("Number Converter"); //main frame
+	private JFrame frm = new JFrame("Number Converter"); // main frame
 	private JFrame frmColor = new JFrame("Choose Background Color"); // frame for the JColorChooser
 
 	// JLabel's
@@ -80,6 +80,9 @@ public class GUI {
 	private JButton colorCancelBtn = new JButton("Cancel");
 	private JButton colorResetBtn = new JButton("Reset");
 	private Color chosenColor;
+
+	String errorMessage;
+	Boolean isValid;
 
 	/*
 	 * Default constructor
@@ -315,7 +318,7 @@ public class GUI {
 				} else {
 					decimalTxt.setEditable(true);
 					binaryTxt.setEditable(true);
-					octalTxt.setEditable(true);		
+					octalTxt.setEditable(true);
 					charTxt.setEditable(true);
 					floatTxt.setEditable(true);
 				}
@@ -349,7 +352,7 @@ public class GUI {
 					octalTxt.setEditable(false);
 					hexTxt.setEditable(false);
 					charTxt.setEditable(false);
-					
+
 				} else {
 					decimalTxt.setEditable(true);
 					binaryTxt.setEditable(true);
@@ -373,8 +376,10 @@ public class GUI {
 				// to each other conversion, and displays them in their corresponding JTextField
 				if (!decimalTxt.getText().isEmpty()) {
 
-				
-						String decimalValue = decimalTxt.getText();
+					String decimalValue = decimalTxt.getText();
+					isValid = InputValidation.decimalValidation(decimalValue);
+					System.out.println("isValid " + isValid);
+					if (isValid == true) {
 						String binaryValue = Converter.convertFromDecimal(decimalValue, 2);
 						binaryTxt.setText(binaryValue);
 
@@ -388,110 +393,148 @@ public class GUI {
 						String floatValue = Converter.binaryToFloatingPoint(binaryValue);
 						floatTxt.setText(floatValue);
 
-						colorTxt.setBackground(Color.decode("#" + Converter.getFloorVal(hexValue)));					
-					
+						colorTxt.setBackground(Color.decode("#" + Converter.getFloorVal(hexValue)));
+					} else {
+						errorMessage = "Not a valid entry only enter positive numbers between 0 and 2,147,483,647";
+						JOptionPane.showMessageDialog(null, errorMessage, "Error", JOptionPane.INFORMATION_MESSAGE);
+					}
+
 				}
 
 				else if (!binaryTxt.getText().isEmpty()) {
 
 					String binaryValue = binaryTxt.getText();
-					binaryValue = Converter.padNumber(binaryValue, 2);
-					binaryTxt.setText(binaryValue);
-					String decimalValue = Converter.convertToDecimal(binaryValue, 2);
-					decimalTxt.setText(decimalValue);
-					String octalValue = Converter.convertFromDecimal(decimalValue, 8);
-					octalTxt.setText(octalValue);
-					String hexValue = Converter.convertFromDecimal(decimalValue, 16);
-					hexTxt.setText(hexValue);
+					isValid = InputValidation.binaryValidation(binaryValue);
 
-					String floatValue = Converter.binaryToFloatingPoint(binaryValue);
-					floatTxt.setText(floatValue);
+					if (isValid == true) {
+						binaryValue = Converter.padNumber(binaryValue, 2);
+						binaryTxt.setText(binaryValue);
+						String decimalValue = Converter.convertToDecimal(binaryValue, 2);
+						decimalTxt.setText(decimalValue);
+						String octalValue = Converter.convertFromDecimal(decimalValue, 8);
+						octalTxt.setText(octalValue);
+						String hexValue = Converter.convertFromDecimal(decimalValue, 16);
+						hexTxt.setText(hexValue);
 
-					String charValue = Converter.binaryToASCII(binaryValue);
-					charTxt.setText(charValue);
-					colorTxt.setBackground(Color.decode("#" + Converter.getFloorVal(hexValue)));
+						String floatValue = Converter.binaryToFloatingPoint(binaryValue);
+						floatTxt.setText(floatValue);
+
+						String charValue = Converter.binaryToASCII(binaryValue);
+						charTxt.setText(charValue);
+						colorTxt.setBackground(Color.decode("#" + Converter.getFloorVal(hexValue)));
+					} else {
+						errorMessage = "Not a valid entry only enter binary numbers(0,1) with a length of 32 or less";
+						JOptionPane.showMessageDialog(null, errorMessage, "Error", JOptionPane.INFORMATION_MESSAGE);
+					}
 				}
 
 				else if (!octalTxt.getText().isEmpty()) {
 
 					String octValue = octalTxt.getText();
+					isValid = InputValidation.octalValidation(octValue);
+					if (isValid == true) {
+						String decimalValue = Converter.convertToDecimal(octValue, 8);
+						decimalTxt.setText(decimalValue);
+						String binaryValue = Converter.convertFromDecimal(decimalValue, 2);
+						binaryTxt.setText(binaryValue);
+						String hexValue = Converter.convertFromDecimal(decimalValue, 16);
+						hexTxt.setText(hexValue);
+						String charValue = Converter.binaryToASCII(binaryValue);
+						charTxt.setText(charValue);
+						String floatValue = Converter.binaryToFloatingPoint(binaryValue);
+						floatTxt.setText(floatValue);
+						colorTxt.setBackground(Color.decode("#" + Converter.getFloorVal(hexValue)));
+					}
 
-					String decimalValue = Converter.convertToDecimal(octValue, 8);
-					decimalTxt.setText(decimalValue);
-					String binaryValue = Converter.convertFromDecimal(decimalValue, 2);
-					binaryTxt.setText(binaryValue);
-					String hexValue = Converter.convertFromDecimal(decimalValue, 16);
-					hexTxt.setText(hexValue);
-					String charValue = Converter.binaryToASCII(binaryValue);
-					charTxt.setText(charValue);
-					String floatValue = Converter.binaryToFloatingPoint(binaryValue);
-					floatTxt.setText(floatValue);
-					colorTxt.setBackground(Color.decode("#" + Converter.getFloorVal(hexValue)));
+					else {
+						errorMessage = "Not a valid entry only enter Octal Numbers(0 - 8) with a length of 10 or less";
+						JOptionPane.showMessageDialog(null, errorMessage, "Error", JOptionPane.INFORMATION_MESSAGE);
+					}
 				}
 
 				else if (!hexTxt.getText().isEmpty()) {
 
 					String hexValue = hexTxt.getText().toUpperCase();
-					hexTxt.setText(hexValue);
-					String decimalValue = Converter.convertToDecimal(hexValue, 16);
-					decimalTxt.setText(decimalValue);
+					isValid = InputValidation.hexValidation(hexValue);
+					if (isValid == true) {
+						hexValue = Converter.padNumber(hexValue, 16);
+						hexTxt.setText(hexValue);
+						String decimalValue = Converter.convertToDecimal(hexValue, 16);
+						decimalTxt.setText(decimalValue);
 
-					String binaryValue = Converter.convertFromDecimal(decimalValue, 2);
-					binaryTxt.setText(binaryValue);
+						String binaryValue = Converter.convertFromDecimal(decimalValue, 2);
+						binaryTxt.setText(binaryValue);
 
-					String octValue = Converter.convertFromDecimal(decimalValue, 8);
-					octalTxt.setText(octValue);
-					String charValue = Converter.binaryToASCII(binaryValue);
-					charTxt.setText(charValue);
-					String floatValue = Converter.binaryToFloatingPoint(binaryValue);
-					floatTxt.setText(floatValue);
-				
-					
-					colorTxt.setBackground(Color.decode("#" + Converter.getFloorVal(hexValue.substring(0,6))));
-				} 
-				
-				else if(!charTxt.getText().isEmpty()) {
-					String charValue = charTxt.getText();
-					
-					String binaryValue = Converter.asciiToBinary(charValue);
-					binaryTxt.setText(binaryValue);
-					
-					String decimalValue = Converter.convertToDecimal(binaryValue, 2);
-					decimalTxt.setText(decimalValue);
-					
-					String octalValue = Converter.convertFromDecimal(decimalValue, 8);
-					octalTxt.setText(octalValue);
-					
-					String hexValue = Converter.convertFromDecimal(decimalValue, 16);
-					hexTxt.setText(hexValue);
-					String floatValue = Converter.binaryToFloatingPoint(binaryValue);
-					floatTxt.setText(floatValue);
-					
-					colorTxt.setBackground(Color.decode("#" + Converter.getFloorVal(hexValue)));
+						String octValue = Converter.convertFromDecimal(decimalValue, 8);
+						octalTxt.setText(octValue);
+						String charValue = Converter.binaryToASCII(binaryValue);
+						charTxt.setText(charValue);
+						String floatValue = Converter.binaryToFloatingPoint(binaryValue);
+						floatTxt.setText(floatValue);
+
+						colorTxt.setBackground(Color.decode("#" + Converter.getFloorVal(hexValue.substring(0, 6))));
+					}
+
+					else {
+						errorMessage = "Not a valid entry only enter HexaDecimal Values(0 - F) with a length of 8 or less";
+						JOptionPane.showMessageDialog(null, errorMessage, "Error", JOptionPane.INFORMATION_MESSAGE);
+					}
 				}
-				else if (!floatTxt.getText().isEmpty()) {
+
+				else if (!charTxt.getText().isEmpty()) {
+					String charValue = charTxt.getText();
+					isValid = InputValidation.charValidation(charValue);
+
+					if (isValid == true) {
+						String binaryValue = Converter.asciiToBinary(charValue);
+						binaryTxt.setText(binaryValue);
+
+						String decimalValue = Converter.convertToDecimal(binaryValue, 2);
+						decimalTxt.setText(decimalValue);
+
+						String octalValue = Converter.convertFromDecimal(decimalValue, 8);
+						octalTxt.setText(octalValue);
+
+						String hexValue = Converter.convertFromDecimal(decimalValue, 16);
+						hexTxt.setText(hexValue);
+						String floatValue = Converter.binaryToFloatingPoint(binaryValue);
+						floatTxt.setText(floatValue);
+
+						colorTxt.setBackground(Color.decode("#" + Converter.getFloorVal(hexValue)));
+					}
+
+					else {
+						errorMessage = "Not a valid entry only enter characters with a length of 4 or less";
+						JOptionPane.showMessageDialog(null, errorMessage, "Error", JOptionPane.INFORMATION_MESSAGE);
+					}
+				} else if (!floatTxt.getText().isEmpty()) {
 
 					String floatValue = floatTxt.getText();
-					
-					String binaryValue = Converter.floatingPointToBinary(floatValue);
-					binaryTxt.setText(binaryValue);
-			
-					String decimalValue = Converter.convertToDecimal(binaryValue, 2);
-					decimalTxt.setText(decimalValue);
-					String octValue = Converter.convertFromDecimal(decimalValue, 8);
-					octalTxt.setText(octValue);
-					
-					String hexValue = Converter.convertFromDecimal(decimalValue, 16);
-					hexTxt.setText(hexValue);
-					String charValue = Converter.binaryToASCII(binaryValue);
-					charTxt.setText(charValue);
-					colorTxt.setBackground(Color.decode("#" + Converter.getFloorVal(hexValue)));
-					
+					isValid = InputValidation.floatValidation(floatValue);
+					if (isValid == true) {
+						String binaryValue = Converter.floatingPointToBinary(floatValue);
+						binaryTxt.setText(binaryValue);
+
+						String decimalValue = Converter.convertToDecimal(binaryValue, 2);
+						decimalTxt.setText(decimalValue);
+						String octValue = Converter.convertFromDecimal(decimalValue, 8);
+						octalTxt.setText(octValue);
+
+						String hexValue = Converter.convertFromDecimal(decimalValue, 16);
+						hexTxt.setText(hexValue);
+						String charValue = Converter.binaryToASCII(binaryValue);
+						charTxt.setText(charValue);
+						colorTxt.setBackground(Color.decode("#" + Converter.getFloorVal(hexValue)));
+					} else {
+						errorMessage = "Not a valid entry only enter numbers between 1.7014x 10^38 and 1.7014x10^-38";
+						JOptionPane.showMessageDialog(null, errorMessage, "Error", JOptionPane.INFORMATION_MESSAGE);
+					}
+
 				}
 
 			}
 		});
-		
+
 		clearBtn.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -533,13 +576,13 @@ public class GUI {
 				chosenColor = colorChooser.getColor();
 
 				String hexString = Converter.colorToHexString(chosenColor);
-				
+
 				System.out.println("hex string  " + hexString);
 				String decimalVal = Converter.convertToDecimal(hexString, 16);
 				System.out.println("dec val " + decimalVal);
 				String binaryVal = Converter.convertFromDecimal(decimalVal, 2);
-				
-				 System.out.println("hex val at gui " + hexString);
+
+				System.out.println("hex val at gui " + hexString);
 				decimalTxt.setText(decimalVal);
 				binaryTxt.setText(binaryVal);
 				octalTxt.setText(Converter.convertFromDecimal(decimalVal, 8));
@@ -551,8 +594,6 @@ public class GUI {
 
 			}
 		});
-		
-		
 
 		/*
 		 * Action Listener for when colorCancelBtn is pressed
@@ -560,7 +601,7 @@ public class GUI {
 		colorCancelBtn.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				//closes the frame
+				// closes the frame
 				frmColor.dispose();
 
 			}
@@ -572,7 +613,6 @@ public class GUI {
 		colorResetBtn.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				
 				frmColor.dispose();
 			}
 		});

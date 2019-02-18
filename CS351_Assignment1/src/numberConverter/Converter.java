@@ -367,6 +367,8 @@ public class Converter {
 			result+= convertFromDecimal(Integer.toString(intVal), 2).substring(24, 32);
 			
 		}
+		
+		result = padNumber(result, 2); //pads the binaryVal with 0's to fit 32 bits
 
 		return result;
 

@@ -1,3 +1,14 @@
+/*
+ * @author Daniyal Adzhiyev 
+ * Version: 1.1.0
+ *  Date: 2/19/2019 
+ *  CS351 - Assignment 1
+ * 
+ *         This application creates a number converter between
+ *         decimal, binary, octal, hexadecimal, ASCII value,
+ *         RGB color value, and floating point decimal
+ *               
+ */
 package numberConverter;
 
 import java.awt.Color;
@@ -34,7 +45,7 @@ public class Converter {
 			String remPart = cfdRemainderPart(split[1], base); // converts the remainder or "real" part
 			result = intPart + "." + remPart; // adds them back together to get the result
 		}
-		 result = padNumber(result, base);
+		result = padNumber(result, base);
 		return result;
 	}
 
@@ -150,7 +161,7 @@ public class Converter {
 	 */
 	public static String ctdIntPart(String num, int base) {
 		int indexVal = 0; // value at index of the string
-		int value = 0;
+		long value = 0;
 		String result = "";
 		String reverseVal = reverseString(num); // reverses the string
 
@@ -165,7 +176,7 @@ public class Converter {
 			value += indexVal * Math.pow(base, i); // calculates the total converted value
 		}
 
-		result = Integer.toString(value); // strings the integer value and stores it into result
+		result = Long.toString(value); // strings the integer value and stores it into result
 		return result;
 	}
 
@@ -236,67 +247,64 @@ public class Converter {
 	 * @return String result the converted binary value
 	 */
 	public static String floatingPointToBinary(String num) {
-		char sign = '0'; //value of the sign, set to '0' for positive
-		double dblVal = Double.parseDouble(num);  //converted floating point stored as a double
+		char sign = '0'; // value of the sign, set to '0' for positive
+		double dblVal = Double.parseDouble(num); // converted floating point stored as a double
 		String mantissa = ""; // mantissa value
 		int expValue; // exponent value
 		int decimalEVal; // E value as a decimal
 		String binaryEVal = ""; // E value as binary
 
-		//formatted double value to display number 'written out' NOT in scientific notation
-		String strVal = String.format("%.60f", dblVal); 
-		System.out.println("strVal " + strVal);
-		//converts to binary
+		// formatted double value to display number 'written out' NOT in scientific
+		// notation
+		String strVal = String.format("%.60f", dblVal);
+		// converts to binary
 		String binaryValue = convertFromDecimal(strVal, 2);
-		
-		//gets the index of where the '.' is
+
+		// gets the index of where the '.' is
 		int decimalIndex = binaryValue.indexOf(".");
 		int oneIndex = binaryValue.indexOf("1");
 		expValue = decimalIndex - oneIndex - 1;
-		
-		
-		
-		//if the floating point value is greater than or equal to 1
-		if (dblVal >= 1) {			
-			binaryValue = binaryValue.substring(binaryValue.indexOf('1'), binaryValue.indexOf('.')); 
-			mantissa = binaryValue.substring(1); //gets the mantissa value
-			
-	
-		} 
-		//if the floating point value is less than 1
+
+		// if the floating point value is greater than or equal to 1
+		if (dblVal >= 1) {
+			binaryValue = binaryValue.substring(binaryValue.indexOf('1'), binaryValue.indexOf('.'));
+			mantissa = binaryValue.substring(1); // gets the mantissa value
+
+		}
+		// if the floating point value is less than 1
 		else {
 
-			binaryValue = binaryValue.substring(decimalIndex); //trims the result to start from the decimal point	
-			oneIndex = binaryValue.indexOf("1"); //index of where the first 1 is in the binaryValue
-			mantissa = binaryValue.substring(oneIndex + 1); //gets the mantissa from the binaryValue
-			expValue = expValue+1; //adds one to the expValue to get correct value when the float value < 1
+			binaryValue = binaryValue.substring(decimalIndex); // trims the result to start from the decimal point
+			oneIndex = binaryValue.indexOf("1"); // index of where the first 1 is in the binaryValue
+			mantissa = binaryValue.substring(oneIndex + 1); // gets the mantissa from the binaryValue
+			expValue = expValue + 1; // adds one to the expValue to get correct value when the float value < 1
 		}
-		
-		//trims the mantissa to the first 23 digits to fit
+
+		// trims the mantissa to the first 23 digits to fit
 		if (mantissa.length() > 23) {
-				mantissa = mantissa.substring(0,23);
-			}
-		
-		//if mantissa is less than 23 it adds trailing '0's
-		while(mantissa.length() < 23) {
-			mantissa+= '0';
+			mantissa = mantissa.substring(0, 23);
 		}
-		
-		decimalEVal = expValue + 127; //gets the Decimal value of E
-		binaryEVal = convertFromDecimal(Integer.toString(decimalEVal), 2); //gets the binary value of E
-		oneIndex = binaryEVal.indexOf("1"); //index of where the first 1 is in the binaryEVal
-		binaryEVal = binaryEVal.substring(oneIndex); //trims the index of excessive 0's
-		
-		//makes sure the EVal has a length of 8
-		while(binaryEVal.length() < 8) {
+
+		// if mantissa is less than 23 it adds trailing '0's
+		while (mantissa.length() < 23) {
+			mantissa += '0';
+		}
+
+		decimalEVal = expValue + 127; // gets the Decimal value of E
+		binaryEVal = convertFromDecimal(Integer.toString(decimalEVal), 2); // gets the binary value of E
+		oneIndex = binaryEVal.indexOf("1"); // index of where the first 1 is in the binaryEVal
+		binaryEVal = binaryEVal.substring(oneIndex); // trims the index of excessive 0's
+
+		// makes sure the EVal has a length of 8
+		while (binaryEVal.length() < 8) {
 			binaryEVal = '0' + binaryEVal;
-		}	
-	
-		String result = sign + binaryEVal + mantissa; //complete IEE binary equivalent
+		}
+
+		String result = sign + binaryEVal + mantissa; // complete IEE binary equivalent
 
 		return result;
 	}
-	
+
 	/*
 	 * This method converts a 32-bit binary number into it's ASCII equivalent
 	 * 
@@ -307,30 +315,32 @@ public class Converter {
 	public static String binaryToASCII(String num) {
 
 		String binaryNum = num;
-		String[] strValues = new String[4]; //array to hold the binary strings for each char
+		String[] strValues = new String[4]; // array to hold the binary strings for each char
 		String result = "";
 
-		//check if the binary number has a decimal
+		// check if the binary number has a decimal
 		if (num.contains(".")) {
-			binaryNum = binaryNum.substring(0, num.indexOf(".")); //trims the binaryNum to only its integer part
+			binaryNum = binaryNum.substring(0, num.indexOf(".")); // trims the binaryNum to only its integer part
 
 		}
 
-		binaryNum = padNumber(binaryNum, 2); //pads the binary value to fit 32-bit value  
+		binaryNum = padNumber(binaryNum, 2); // pads the binary value to fit 32-bit value
 
-		//splits the binary string into 4 to hold binary value of the characters
+		// splits the binary string into 4 to hold binary value of the characters
 		for (int i = 0; i < 28; i = i + 8) {
-			int j = 0; //index of binary String array
-			strValues[j] = binaryNum.substring(i, i + 8); //adds 8 bits to each array
-			
-			//while looping through converts each binary value to decimal and then its character equivalent
-			//then adding the char to the result
+			int j = 0; // index of binary String array
+			strValues[j] = binaryNum.substring(i, i + 8); // adds 8 bits to each array
+
+			// while looping through converts each binary value to decimal and then its
+			// character equivalent
+			// then adding the char to the result
 			result += (char) Integer.parseInt(convertToDecimal(strValues[j], 2));
 			j++;
 		}
 
 		return result;
 	}
+
 	/*
 	 * Converts ASCII character to its 32-bit binary value
 	 * 
@@ -340,21 +350,22 @@ public class Converter {
 	 */
 	public static String asciiToBinary(String charString) {
 		String result = "";
-		char[] charValues = new char[4]; //array to hold each char value of string
-		int intVal; //holds the integer value for each char
-	
-		//calculates the binary value of the charString
+		char[] charValues = new char[4]; // array to hold each char value of string
+		int intVal; // holds the integer value for each char
+
+		// calculates the binary value of the charString
 		for (int i = 0; i < charString.length(); i++) {
 
-			charValues[i] = charString.charAt(i); //adds to the array the charValue
-			intVal = charValues[i]; //converts the char to integer
-			//converts the decimal value to binary then getting the last 8 bits for each char
-			//and adding to the binary result string
-			result+= convertFromDecimal(Integer.toString(intVal), 2).substring(24, 32);
-			
+			charValues[i] = charString.charAt(i); // adds to the array the charValue
+			intVal = charValues[i]; // converts the char to integer
+			// converts the decimal value to binary then getting the last 8 bits for each
+			// char
+			// and adding to the binary result string
+			result += convertFromDecimal(Integer.toString(intVal), 2).substring(24, 32);
+
 		}
-		
-		result = padNumber(result, 2); //pads the binaryVal with 0's to fit 32 bits
+
+		result = padNumber(result, 2); // pads the binaryVal with 0's to fit 32 bits
 
 		return result;
 
@@ -411,7 +422,7 @@ public class Converter {
 		}
 		return result;
 	}
-	
+
 	/*
 	 * converts a color to its Hex Value equivalent
 	 * 
@@ -420,21 +431,23 @@ public class Converter {
 	 * @return String hexColorVal the Hex Value of the color
 	 */
 	public static String colorToHexString(Color color) {
-		String red = Integer.toString(color.getRed()); //gets the red integer value
-		String green = Integer.toString(color.getGreen()); //gets the green integer value
-		String blue = Integer.toString(color.getBlue()); //gets the blue integer value
+		String red = Integer.toString(color.getRed()); // gets the red integer value
+		String green = Integer.toString(color.getGreen()); // gets the green integer value
+		String blue = Integer.toString(color.getBlue()); // gets the blue integer value
 
-		//converts the integer values of the colors to hexadecimal
-		String redHexVal = convertFromDecimal(red, 16).substring(6, 8); 
+		// converts the integer values of the colors to hexadecimal
+		String redHexVal = convertFromDecimal(red, 16).substring(6, 8);
 		String greenHexVal = convertFromDecimal(green, 16).substring(6, 8);
 		String blueHexVal = convertFromDecimal(blue, 16).substring(6, 8);
-	
-		//adds the alpha '00' and hexvalues together to get the hexadecimal string value
-		String hexColorVal = "00" + redHexVal + greenHexVal + blueHexVal;
-		
+
+		// adds the default alpha as 'FF' and adds hexvalues together to get the
+		// hexadecimal string
+		String hexColorVal = "FF" + redHexVal + greenHexVal + blueHexVal;
+
 		return hexColorVal;
 
 	}
+
 	/*
 	 * This method reverse a String
 	 * 
@@ -457,13 +470,14 @@ public class Converter {
 	 * depending on the base
 	 * 
 	 * @param String num the number to be padded
+	 * 
 	 * @param int Base the base value of the number
 	 * 
 	 * @return result the padded Number
 	 */
 	public static String padNumber(String num, int base) {
 		String paddedVal = num;
-		//pads the string depending on the base of the number to fit 32-bit values  
+		// pads the string depending on the base of the number to fit 32-bit values
 		if (base == 2) {
 			while (paddedVal.length() < 32) {
 				paddedVal = '0' + paddedVal;
@@ -480,7 +494,7 @@ public class Converter {
 
 		return paddedVal;
 	}
-	
+
 	/*
 	 * Calculates the floor value for a real number
 	 * 
@@ -490,16 +504,16 @@ public class Converter {
 	 */
 	public static String getFloorVal(String num) {
 		String floorVal = num;
-		
-		//If the number is a whole integer
+
+		// If the number is a whole integer
 		if (!num.contains(".")) {
 			return floorVal;
 		}
-		
-		//if the number is a real value
+
+		// if the number is a real value
 		else {
-			String[] split = num.split("\\."); //splits the number by the decimal point
-			floorVal = split[0]; //floor value, which is the integer part of the number
+			String[] split = num.split("\\."); // splits the number by the decimal point
+			floorVal = split[0]; // floor value, which is the integer part of the number
 		}
 		return floorVal;
 	}

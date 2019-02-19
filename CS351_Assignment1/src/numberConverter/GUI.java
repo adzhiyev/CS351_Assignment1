@@ -1,13 +1,13 @@
 /*
  * @author Daniyal Adzhiyev 
- * Version: 0.0.1 
- * Date: 1/25/2019 
- * CS351
+ * Version: 1.1.0
+ *  Date: 2/19/2019 
+ *  CS351 - Assignment 1
  * 
  *         This application creates a number converter between
  *         decimal, binary, octal, hexadecimal, ASCII value,
  *         RGB color value, and floating point decimal
- *         
+ *               
  */
 package numberConverter;
 
@@ -88,8 +88,11 @@ public class GUI {
 	String hexValue;
 	String charValue;
 	String floatValue;
+
 	String errorMessage; // holds error message
 	Boolean isValid; // checks if string is valid
+
+	String previousBinaryString = ""; // stores previous binary string to restore values
 
 	/*
 	 * Default constructor
@@ -404,8 +407,8 @@ public class GUI {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 
-				// Checks to see which text field is not empty and then converts that value
-				// to each other conversion, and displays them in their corresponding JTextField
+				// Checks if the decimal text field is not empty, and then converts the the
+				// number in the text field to other bases
 				if (!decimalTxt.getText().isEmpty()) {
 
 					decimalValue = decimalTxt.getText();
@@ -429,22 +432,23 @@ public class GUI {
 						floatValue = Converter.binaryToFloatingPoint(binaryValue);
 						floatTxt.setText(floatValue);
 
-						// decodes the hex value to get the color and sets the color text field with
-						// value
-						colorTxt.setBackground(Color.decode("#" + Converter.getFloorVal(hexValue)));
+						// decodes the hex value to get the RGB color values, and sets the color of the
+						// text field
+						colorTxt.setBackground(Color.decode("#" + Converter.getFloorVal(hexValue).substring(2, 8)));
 					}
-					// if not valid it will give a pop box error message
+					// if not valid it will give a pop up box error message
 					else {
-						errorMessage = "Not a valid entry only enter positive numbers between 0 and 2,147,483,647";
+						errorMessage = "Not a valid entry only enter positive numbers between 0 and 4,294,967,295";
 						JOptionPane.showMessageDialog(null, errorMessage, "Error", JOptionPane.INFORMATION_MESSAGE);
 					}
 
 				}
-
+				// Checks if the binary text field is not empty, and then converts the the
+				// number in the text field to other bases
 				else if (!binaryTxt.getText().isEmpty()) {
 
 					binaryValue = binaryTxt.getText();
-					isValid = InputValidation.binaryValidation(binaryValue);
+					isValid = InputValidation.binaryValidation(binaryValue); // checks if input is valid
 
 					if (isValid == true) {
 
@@ -466,22 +470,31 @@ public class GUI {
 						charValue = Converter.binaryToASCII(binaryValue);
 						charTxt.setText(charValue);
 
-						colorTxt.setBackground(Color.decode("#" + Converter.getFloorVal(hexValue)));
-					} else {
+						// sets the colorTxt background with the RGB values of the hex value, which is
+						// the last 6 digits
+						colorTxt.setBackground(Color.decode("#" + Converter.getFloorVal(hexValue).substring(2, 8)));
+
+					}
+					// if not valid it will give a pop up box error message
+					else {
 
 						errorMessage = "Not a valid entry only enter binary numbers(0,1) with a length of 32 or less";
 						JOptionPane.showMessageDialog(null, errorMessage, "Error", JOptionPane.INFORMATION_MESSAGE);
 					}
 				}
 
+				// Checks if the octal text field is not empty, and then converts the the
+				// number in the text field to other bases
 				else if (!octalTxt.getText().isEmpty()) {
 
-					String octValue = octalTxt.getText();
-					isValid = InputValidation.octalValidation(octValue);
+					octalValue = octalTxt.getText();
+					isValid = InputValidation.octalValidation(octalValue); // checks if input is valid
 
 					if (isValid == true) {
+						octalValue = Converter.padNumber(octalValue, 8); // pads the octal value with 0's
+						octalTxt.setText(octalValue);
 
-						decimalValue = Converter.convertToDecimal(octValue, 8);
+						decimalValue = Converter.convertToDecimal(octalValue, 8);
 						decimalTxt.setText(decimalValue);
 
 						binaryValue = Converter.convertFromDecimal(decimalValue, 2);
@@ -496,19 +509,22 @@ public class GUI {
 						floatValue = Converter.binaryToFloatingPoint(binaryValue);
 						floatTxt.setText(floatValue);
 
-						colorTxt.setBackground(Color.decode("#" + Converter.getFloorVal(hexValue)));
+						// sets the colorTxt background with the RGB values of the hex value, which is
+						// the last 6 digits
+						colorTxt.setBackground(Color.decode("#" + Converter.getFloorVal(hexValue).substring(2, 8)));
 					}
-
+					// if not valid it will give a pop up box error message
 					else {
 						errorMessage = "Not a valid entry only enter Octal Numbers(0 - 8) with a length of 10 or less";
 						JOptionPane.showMessageDialog(null, errorMessage, "Error", JOptionPane.INFORMATION_MESSAGE);
 					}
 				}
-
+				// Checks if the hexadecimal text field is not empty, and then converts the the
+				// number in the text field to other bases
 				else if (!hexTxt.getText().isEmpty()) {
 
-					hexValue = hexTxt.getText().toUpperCase();
-					isValid = InputValidation.hexValidation(hexValue);
+					hexValue = hexTxt.getText().toUpperCase(); // Upper cases the string for conversion
+					isValid = InputValidation.hexValidation(hexValue); // checks if input is valid
 
 					if (isValid == true) {
 						hexValue = Converter.padNumber(hexValue, 16); // pads the hex value with 0's
@@ -534,17 +550,18 @@ public class GUI {
 						colorTxt.setBackground(Color.decode("#" + Converter.getFloorVal(hexValue.substring(2, 8))));
 
 					}
-
+					// if not valid it will give a pop up box error message
 					else {
 						errorMessage = "Not a valid entry only enter HexaDecimal Values(0 - F) with a length of 8 or less";
 						JOptionPane.showMessageDialog(null, errorMessage, "Error", JOptionPane.INFORMATION_MESSAGE);
 					}
 				}
-
+				// Checks if the character text field is not empty, and then converts the the
+				// number in the text field to other bases
 				else if (!charTxt.getText().isEmpty()) {
 
 					charValue = charTxt.getText();
-					isValid = InputValidation.charValidation(charValue);
+					isValid = InputValidation.charValidation(charValue); // checks if input is valid
 
 					if (isValid == true) {
 
@@ -561,19 +578,24 @@ public class GUI {
 						hexTxt.setText(hexValue);
 						floatValue = Converter.binaryToFloatingPoint(binaryValue);
 						floatTxt.setText(floatValue);
-
-						colorTxt.setBackground(Color.decode("#" + Converter.getFloorVal(hexValue)));
+						// sets the colorTxt background with the RGB values of the hex value, which is
+						// the last 6 digits
+						colorTxt.setBackground(Color.decode("#" + Converter.getFloorVal(hexValue).substring(2, 8)));
 					}
-
+					// if not valid it will give a pop up box error message
 					else {
 						errorMessage = "Not a valid entry only enter characters with a length of 4 or less";
 						JOptionPane.showMessageDialog(null, errorMessage, "Error", JOptionPane.INFORMATION_MESSAGE);
 					}
 
-				} else if (!floatTxt.getText().isEmpty()) {
+				}
+				// Checks if the float text field is not empty, and then converts the the
+				// number in the text field to other bases
+				else if (!floatTxt.getText().isEmpty()) {
 
 					String floatValue = floatTxt.getText();
-					isValid = InputValidation.floatValidation(floatValue);
+					isValid = InputValidation.floatValidation(floatValue); // checks if input is valid
+
 					if (isValid == true) {
 
 						binaryValue = Converter.floatingPointToBinary(floatValue);
@@ -590,11 +612,14 @@ public class GUI {
 
 						String charValue = Converter.binaryToASCII(binaryValue);
 						charTxt.setText(charValue);
+						// sets the colorTxt background with the RGB values of the hex value, which is
+						// the last 6 digits
+						colorTxt.setBackground(Color.decode("#" + Converter.getFloorVal(hexValue).substring(2, 8)));
 
-						colorTxt.setBackground(Color.decode("#" + Converter.getFloorVal(hexValue)));
-
-					} else {
-						errorMessage = "Not a valid entry only enter numbers between 1.7014x 10^38 and 1.7014x10^-38";
+					}
+					// if not valid it will give a pop up box error message
+					else {
+						errorMessage = "Not a valid entry only enter numbers between 1.7014x 10^-38 and 1.7014x10^38";
 						JOptionPane.showMessageDialog(null, errorMessage, "Error", JOptionPane.INFORMATION_MESSAGE);
 					}
 
@@ -609,7 +634,6 @@ public class GUI {
 		clearBtn.addActionListener(new ActionListener() {
 
 			@Override
-
 			public void actionPerformed(ActionEvent e) {
 				// sets all the text fields to empty and the colorTxt field to white
 				decimalTxt.setText("");
@@ -626,11 +650,14 @@ public class GUI {
 		 * Action Listener for when colorBtn is clicked
 		 */
 		colorBtn.addActionListener(new ActionListener() {
-			@Override
 
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				frmColor.setVisible(true); // makes the frmColor visible
 
+				// Keeps the binary value before the Color panel is opened to be able to restore
+				// the conversions
+				previousBinaryString = binaryTxt.getText();
 			}
 		});
 		/*
@@ -661,8 +688,6 @@ public class GUI {
 				colorTxt.setBackground(chosenColor);
 				floatTxt.setText(Converter.binaryToFloatingPoint(binaryValue));
 
-				frmColor.setVisible(false); // closes the color frame
-
 			}
 		});
 
@@ -672,8 +697,7 @@ public class GUI {
 		colorCancelBtn.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				// closes the frame
-				frmColor.dispose();
+				frmColor.dispose(); // closes the color frame
 
 			}
 		});
@@ -684,7 +708,14 @@ public class GUI {
 		colorResetBtn.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				frmColor.dispose();
+
+				clearBtn.doClick(); // Clears all the text fields
+				binaryTxt.setText(previousBinaryString); // sets the binary text field to previous value
+
+				// clears the decimal text field so will by default convert from binary value
+				// clicks the convert Button which will perform conversions by the stored
+				// previous binary value
+				convertBtn.doClick();
 			}
 		});
 
